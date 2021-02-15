@@ -2,6 +2,7 @@ import {CountryType} from '../components/Question';
 
 type initialStateType = typeof initialState
 
+// @ts-ignore
 const initialState = {
     countryCapitalList: [
         {name: 'Англии', capital: 'Лондон', x: 51.507351, y: -0.127660},
@@ -18,12 +19,27 @@ const initialState = {
 }
 
 
-type ActionTypes = GetCountryType
+type ActionTypes = GetCountryType | RunNewGameType
+
+function shuffle(array: any) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 export const gameReducer = (state: initialStateType = initialState, action: ActionTypes): initialStateType => {
     switch (action.type) {
         case 'GET_COUNTRY': {
-            return {...state, countryNumber: action.nextCountryNumber, displayCountry: action.countryCapitalList[action.nextCountryNumber]}
+            let newDisplayCountry = {...state}.countryCapitalList[action.nextCountryNumber]
+            return {...state, countryNumber: action.nextCountryNumber, displayCountry: newDisplayCountry}
+        }
+        case 'RUN_NEW_GAME': {
+            let shuffleArray = {...state}.countryCapitalList
+            shuffle(shuffleArray)
+            console.log(shuffleArray)
+            return {...state, countryCapitalList: shuffleArray, displayCountry: shuffleArray[0]}
         }
         default: {
             return state
@@ -31,12 +47,16 @@ export const gameReducer = (state: initialStateType = initialState, action: Acti
     }
 }
 
-export const getCountry = (countryNumber: number, countryCapitalList: Array<CountryType>) => ({
+export const getCountry = (countryNumber: number) => ({
     type: 'GET_COUNTRY',
-    nextCountryNumber: countryNumber + 1,
-    countryCapitalList
+    nextCountryNumber: countryNumber + 1
+} as const)
+
+export const runNewGame = () => ({
+    type: 'RUN_NEW_GAME',
 } as const)
 
 
 type GetCountryType = ReturnType<typeof getCountry>
+type RunNewGameType = ReturnType<typeof runNewGame>
 

@@ -7,10 +7,12 @@ import XYZSource from 'ol/source/XYZ';
 import {fromLonLat} from 'ol/proj';
 import {CountryType, Question} from './components/Question';
 import {Button} from 'antd';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './redux/redux-store';
+import {runNewGame} from './redux/gameReducer';
 
 function App() {
+    const dispatch = useDispatch()
 
     useEffect(() => {
 
@@ -49,8 +51,14 @@ function App() {
     let displayCountry = useSelector<AppRootStateType, CountryType>(state => state.game.displayCountry)
     let countryCapitalList = useSelector<AppRootStateType, Array<CountryType>>(state => state.game.countryCapitalList)
 
+    const onStartClick = () => {
+        dispatch(runNewGame())
+    }
+
+
     return (
         <div>
+            <Button onClick={onStartClick}>start</Button>
             <Question country={displayCountry} countryCapitalList={countryCapitalList}/>
             <div id='map' className='map' style={{height: '500px', width: '1000px'}}>
                 <Button id="pan-to-london">Pan to London</Button>

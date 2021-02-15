@@ -20,7 +20,6 @@ export const Question = (props: QuestionPropsType) => {
     const dispatch = useDispatch()
 
     const [isChecked, setIsChecked] = useState<boolean>(false);
-
     const [userAnswer, setUserAnswer] = useState<string>('');
     const [right, setRight] = useState<boolean>(false);
 
@@ -38,7 +37,12 @@ export const Question = (props: QuestionPropsType) => {
 
     const onNextClick = () => {
         setIsChecked(false)
-        dispatch(getCountry(countryNumber, props.countryCapitalList))
+        if(countryNumber + 1 < props.countryCapitalList.length) {
+            dispatch(getCountry(countryNumber))
+        } else {
+            alert('Game Over')
+        }
+
     }
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
