@@ -21,7 +21,6 @@ function App() {
             zoom: 6,
         });
 
-
         const map = new Map({
             target: 'map',
             layers: [
@@ -33,7 +32,6 @@ function App() {
             ],
             view: view
         });
-
 
         const london = fromLonLat([-0.12755, 51.507222]);
 

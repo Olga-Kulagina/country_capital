@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from 'react'
 import {Button, Input} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../redux/redux-store';
-import {getCountry} from '../redux/gameReducer';
+import {getCountry, increaseScore} from '../redux/gameReducer';
 
 export type CountryType = {
     name: string,
@@ -24,11 +24,13 @@ export const Question = (props: QuestionPropsType) => {
     const [right, setRight] = useState<boolean>(false);
 
     let countryNumber = useSelector<AppRootStateType, number>(state => state.game.countryNumber)
+    let score = useSelector<AppRootStateType, number>(state => state.game.score)
 
 
     const onCheckClick = () => {
         if (userAnswer === props.country.capital) {
             setRight(true)
+            dispatch(increaseScore())
         } else {
             setRight(false)
         }
@@ -52,10 +54,13 @@ export const Question = (props: QuestionPropsType) => {
     return (
         <div>
             <div>
+                Score: {score}
+            </div>
+            <div>
                 Столица {props.country.name}?
             </div>
             <div>
-                <Input value={userAnswer} onChange={onInputChange}></Input>
+                <Input value={userAnswer} onChange={onInputChange} onPressEnter={onCheckClick}></Input>
             </div>
             <div>
                 <Button onClick={onCheckClick}>Check</Button>
