@@ -1,8 +1,8 @@
 type initialStateType = typeof initialState
 
 const initialState = {
-    mapCenterX: 53.562004,
-    mapCenterY: 23.788890,
+    mapCenterY: -0.12755,
+    mapCenterX: 51.507222,
     baseUrl: ''
 }
 //'https://stamen-tiles-c.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'

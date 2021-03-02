@@ -13,7 +13,7 @@ export type CountryType = {
 
 type QuestionPropsType = {
     country: CountryType
-    countryCapitalList: Array<CountryType>
+    displayList: Array<CountryType>
 }
 
 export const Question = (props: QuestionPropsType) => {
@@ -28,7 +28,7 @@ export const Question = (props: QuestionPropsType) => {
 
 
     const onCheckClick = () => {
-        if (userAnswer === props.country.capital) {
+        if (userAnswer.toLowerCase() === props.country.capital.toLowerCase()) {
             setRight(true)
             dispatch(increaseScore())
         } else {
@@ -39,8 +39,9 @@ export const Question = (props: QuestionPropsType) => {
 
     const onNextClick = () => {
         setIsChecked(false)
-        if(countryNumber + 1 < props.countryCapitalList.length) {
+        if(countryNumber + 1 < props.displayList.length) {
             dispatch(getCountry(countryNumber))
+            setUserAnswer('')
         } else {
             alert('Game Over')
         }
