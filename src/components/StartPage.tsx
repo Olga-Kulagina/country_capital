@@ -7,7 +7,7 @@ export const StartPage = () => {
     const dispatch = useDispatch()
 
     const onStartClick = () => {
-        dispatch(runNewGame('Europe'))
+        dispatch(runNewGame('South America'))
     }
 
     return (
