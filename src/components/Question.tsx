@@ -15,6 +15,7 @@ export type CountryType = {
 type QuestionPropsType = {
     country: CountryType
     displayList: Array<CountryType>
+    record: number
 }
 
 export const Question = (props: QuestionPropsType) => {
@@ -26,6 +27,7 @@ export const Question = (props: QuestionPropsType) => {
 
     let countryNumber = useSelector<AppRootStateType, number>(state => state.game.countryNumber)
     let score = useSelector<AppRootStateType, number>(state => state.game.score)
+
 
     const onCheckClick = () => {
         if (userAnswer.toLowerCase() === props.country.capital.toLowerCase()) {
@@ -43,13 +45,29 @@ export const Question = (props: QuestionPropsType) => {
             content: (
                 <div>
                     <p>Правильных ответов: {score}</p>
+                    <p>Рекорд: {props.record > score ? props.record : score}</p>
+                </div>
+            ),
+            icon: <EnvironmentOutlined  />,
+            onOk() {
+                dispatch(setGameOver(score))
+            },
+        })
+    }
+    function gameFinish() {
+        Modal.info({
+            title: 'Выход из игры',
+            content: (
+                <div>
+                    <p>Правильных ответов: {score}</p>
+                    <p>Рекорд: {props.record > score ? props.record : score}</p>
                 </div>
             ),
             icon: <EnvironmentOutlined />,
             onOk() {
-                dispatch(setGameOver())
+                dispatch(setGameOver(score))
             },
-        });
+        })
     }
 
     const onNextClick = () => {
@@ -87,6 +105,9 @@ export const Question = (props: QuestionPropsType) => {
                     <Button onClick={onNextClick} autoFocus={true}><RightOutlined /></Button>
                 </div>
             }
+            <div>
+                <Button onClick={gameFinish}>Завершить</Button>
+            </div>
         </div>
     )
 }

@@ -19,6 +19,7 @@ const initialState = {
     countryNumber: 0,
     displayCountry: {} as CountryType,
     score: 0,
+    record: Number(localStorage.getItem('record')) | 0,
     isGameStart: false
 }
 
@@ -58,7 +59,14 @@ export const gameReducer = (state: initialStateType = initialState, action: Acti
             return {...state, score: state.score + 1}
         }
         case 'SET_GAME_OVER': {
-            return {...state, isGameStart: false, score: 0, countryNumber: 0}
+            localStorage.setItem('record', action.score > state.record ? action.score.toString() : state.record.toString())
+            return {
+                ...state,
+                isGameStart: false,
+                score: 0,
+                countryNumber: 0,
+                record: action.score > state.record ? action.score : state.record
+            }
         }
         default: {
             return state
@@ -81,8 +89,9 @@ export const increaseScore = () => ({
     type: 'INCREASE_SCORE'
 } as const)
 
-export const setGameOver = () => ({
-    type: 'SET_GAME_OVER'
+export const setGameOver = (score: number) => ({
+    type: 'SET_GAME_OVER',
+    score
 } as const)
 
 

@@ -9,14 +9,15 @@ import {Col, Row} from 'antd';
 function App() {
 
     const isGameStart = useSelector<AppRootStateType, boolean>(state => state.game.isGameStart)
+    let record = useSelector<AppRootStateType, number>(state => state.game.record)
 
     return (
         <div>
             <Row justify='center'>
                 <Col span={24} style={{textAlign: 'center'}}>
                     {!isGameStart ?
-                        <StartPage />
-                        : <GamePage />
+                        <StartPage record={record}/>
+                        : <GamePage record={record}/>
                     }
                 </Col>
             </Row>

@@ -3,7 +3,11 @@ import {Button, InputNumber, Radio, RadioChangeEvent} from 'antd';
 import {countrySetType, runNewGame} from '../redux/gameReducer';
 import {useDispatch} from 'react-redux';
 
-export const StartPage = () => {
+type StartPageType = {
+    record: number
+}
+
+export const StartPage = (props: StartPageType) => {
     const dispatch = useDispatch()
 
     const [radioCountryValue, setRadioCountryValue] = useState<countrySetType>('Europe');
@@ -65,6 +69,9 @@ export const StartPage = () => {
             </div>
             <div>
                 <Button onClick={onStartClick}>Старт!</Button>
+            </div>
+            <div>
+                <h2>Рекорд: {props.record}</h2>
             </div>
         </div>
     )
