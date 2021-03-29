@@ -4,6 +4,7 @@ import {GamePage} from './components/GamePage';
 import {StartPage} from './components/StartPage';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from './redux/redux-store';
+import {Col, Row} from 'antd';
 
 function App() {
 
@@ -11,10 +12,15 @@ function App() {
 
     return (
         <div>
-            {!isGameStart ?
-                <StartPage />
-                : <GamePage />
-            }
+            <Row justify='center'>
+                <Col span={24} style={{textAlign: 'center'}}>
+                    {!isGameStart ?
+                        <StartPage />
+                        : <GamePage />
+                    }
+                </Col>
+            </Row>
+
         </div>
 
     );

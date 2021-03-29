@@ -22,6 +22,7 @@ export const Question = (props: QuestionPropsType) => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
     const [userAnswer, setUserAnswer] = useState<string>('');
     const [right, setRight] = useState<boolean>(false);
+    const [focus, setFocus] = useState<boolean>(true)
 
     let countryNumber = useSelector<AppRootStateType, number>(state => state.game.countryNumber)
     let score = useSelector<AppRootStateType, number>(state => state.game.score)
@@ -34,17 +35,18 @@ export const Question = (props: QuestionPropsType) => {
         } else {
             setRight(false)
         }
-        setIsChecked(true)
+        setTimeout(setIsChecked, 10, true)
     }
 
     const onNextClick = () => {
-        setIsChecked(false)
+
         if(countryNumber + 1 < props.displayList.length) {
             dispatch(getCountry(countryNumber))
             setUserAnswer('')
         } else {
             alert('Game Over')
         }
+        setIsChecked(false)
 
     }
 
@@ -57,21 +59,20 @@ export const Question = (props: QuestionPropsType) => {
             <div>
                 Score: {score}
             </div>
-            <div>
-                Столица {props.country.name}?
-            </div>
-            <div>
-                <Input value={userAnswer} onChange={onInputChange} onPressEnter={onCheckClick}></Input>
-            </div>
-            <div>
-                <Button onClick={onCheckClick}>Check</Button>
-            </div>
-            {isChecked ?
+
+            {!isChecked ?
                 <div>
-                    {right ? 'Правильно!' : 'Неверно!'} Ответ: {props.country.capital}
-                    <Button onClick={onNextClick}>Next</Button>
+                    <div>
+                        Столица {props.country.name}?
+                    </div>
+                    <Input style={{width: '200px'}} autoFocus={true}
+                           value={userAnswer} onChange={onInputChange} onPressEnter={onCheckClick}></Input>
+                    <Button onClick={onCheckClick}>Check</Button>
                 </div>
-                : ''
+                : <div style={{height: '50px'}}>
+                    {right ? 'Правильно!' : 'Неверно!'} Ответ: {props.country.capital}
+                    <Button onClick={onNextClick} autoFocus={true}>Next</Button>
+                </div>
             }
         </div>
     )

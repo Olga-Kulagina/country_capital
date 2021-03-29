@@ -2,14 +2,14 @@ import {countryCapitalList} from '../data';
 import {CountryType} from '../components/Question';
 
 type initialStateType = typeof initialState
-type countrySetType = 'Europe' | 'Asia' | 'Africa' | 'Australia and Oceania' | 'North America' | 'South America'
+export type countrySetType = 'Europe' | 'Asia' | 'Africa' | 'Australia and Oceania' | 'North America' | 'South America'
 
 const initialState = {
     countryCapitalList: countryCapitalList,
     displayList: [] as Array<CountryType>,
     countrySet: 'Europe',
     countryNumber: 0,
-    displayCountry: {name: 'Англии', capital: 'Лондон', x: 51.507351, y: -0.127660},
+    displayCountry: {} as CountryType,
     score: 0,
     isGameStart: false
 }
@@ -34,6 +34,7 @@ export const gameReducer = (state: initialStateType = initialState, action: Acti
         case 'RUN_NEW_GAME': {
             let shuffleArray = state.countryCapitalList[action.countrySet]
             shuffle(shuffleArray)
+            shuffleArray.length = action.numberOfQuestions
             console.log(shuffleArray)
             return {...state, displayList: shuffleArray, displayCountry: shuffleArray[0], isGameStart: true}
         }
@@ -51,9 +52,10 @@ export const getCountry = (countryNumber: number) => ({
     nextCountryNumber: countryNumber + 1
 } as const)
 
-export const runNewGame = (countrySet: countrySetType) => ({
+export const runNewGame = (countrySet: countrySetType, numberOfQuestions: number) => ({
     type: 'RUN_NEW_GAME',
-    countrySet
+    countrySet,
+    numberOfQuestions
 } as const)
 
 export const increaseScore = () => ({
