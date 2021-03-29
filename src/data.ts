@@ -206,3 +206,7 @@ export const countryCapitalList = {
         {name: 'Эквадора', capital: 'Кито', x: -33.441964, y: -70.640909}
     ]
 }
+export const countryCapitalListAll = countryCapitalList.Europe.slice()
+countryCapitalListAll.push(...countryCapitalList['Asia'], ...countryCapitalList['Africa'],
+    ...countryCapitalList['Australia and Oceania'],
+    ...countryCapitalList['North America'], ...countryCapitalList['South America'])

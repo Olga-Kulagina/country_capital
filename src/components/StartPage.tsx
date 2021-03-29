@@ -7,7 +7,7 @@ export const StartPage = () => {
     const dispatch = useDispatch()
 
     const [radioCountryValue, setRadioCountryValue] = useState<countrySetType>('Europe');
-    const [numberOfQuestions, setNumberOfQuestions] = useState<number>(10);
+    const [numberOfQuestions, setNumberOfQuestions] = useState<number>(5);
 
     const onRegionChange = (e: RadioChangeEvent) => {
         setRadioCountryValue(e.target.value);
@@ -42,25 +42,29 @@ export const StartPage = () => {
         case 'South America':
             maxNumberOfQuestions = 12
             break
+        case 'All':
+            maxNumberOfQuestions = 194
+            break
     }
 
     return (
         <div>
             <div>
-                <h2>Select region</h2>
+                <h2>Выберите регион</h2>
                 <Radio.Group onChange={onRegionChange} value={radioCountryValue}>
-                    <Radio value='Europe'>Europe</Radio>
-                    <Radio value='Asia'>Asia</Radio>
-                    <Radio value='Africa'>Africa</Radio>
-                    <Radio value='Australia and Oceania'>Australia and Oceania</Radio>
-                    <Radio value='North America'>North America</Radio>
-                    <Radio value='South America'>South America</Radio>
+                    <Radio value='Europe'>Европа</Radio>
+                    <Radio value='Asia'>Азия</Radio>
+                    <Radio value='Africa'>Африка</Radio>
+                    <Radio value='Australia and Oceania'>Австралия и Океания</Radio>
+                    <Radio value='North America'>Северная Америка</Radio>
+                    <Radio value='South America'>Южная Америка</Radio>
+                    <Radio value='All'>Весь мир</Radio>
                 </Radio.Group>
-                <h2>Select the number of questions</h2>
+                <h2>Выберите количество вопросов</h2>
                 <InputNumber min={5} max={maxNumberOfQuestions} value={numberOfQuestions} onChange={onNumberOfQuestionChange} />
             </div>
             <div>
-                <Button onClick={onStartClick}>start</Button>
+                <Button onClick={onStartClick}>Старт!</Button>
             </div>
         </div>
     )

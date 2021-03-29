@@ -1,8 +1,9 @@
 import React, {ChangeEvent, useState} from 'react'
-import {Button, Input} from 'antd';
+import {Button, Input, Modal} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../redux/redux-store';
-import {getCountry, increaseScore} from '../redux/gameReducer';
+import {getCountry, increaseScore, setGameOver} from '../redux/gameReducer';
+import {EnvironmentOutlined, RightOutlined} from '@ant-design/icons';
 
 export type CountryType = {
     name: string,
@@ -22,11 +23,9 @@ export const Question = (props: QuestionPropsType) => {
     const [isChecked, setIsChecked] = useState<boolean>(false);
     const [userAnswer, setUserAnswer] = useState<string>('');
     const [right, setRight] = useState<boolean>(false);
-    const [focus, setFocus] = useState<boolean>(true)
 
     let countryNumber = useSelector<AppRootStateType, number>(state => state.game.countryNumber)
     let score = useSelector<AppRootStateType, number>(state => state.game.score)
-
 
     const onCheckClick = () => {
         if (userAnswer.toLowerCase() === props.country.capital.toLowerCase()) {
@@ -38,16 +37,30 @@ export const Question = (props: QuestionPropsType) => {
         setTimeout(setIsChecked, 10, true)
     }
 
+    function gameOver() {
+        Modal.info({
+            title: 'Вопросов больше нет!',
+            content: (
+                <div>
+                    <p>Правильных ответов: {score}</p>
+                </div>
+            ),
+            icon: <EnvironmentOutlined />,
+            onOk() {
+                dispatch(setGameOver())
+            },
+        });
+    }
+
     const onNextClick = () => {
 
         if(countryNumber + 1 < props.displayList.length) {
             dispatch(getCountry(countryNumber))
             setUserAnswer('')
         } else {
-            alert('Game Over')
+            gameOver()
         }
         setIsChecked(false)
-
     }
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +70,7 @@ export const Question = (props: QuestionPropsType) => {
     return (
         <div>
             <div>
-                Score: {score}
+                Счет: {score}
             </div>
 
             {!isChecked ?
@@ -67,11 +80,11 @@ export const Question = (props: QuestionPropsType) => {
                     </div>
                     <Input style={{width: '200px'}} autoFocus={true}
                            value={userAnswer} onChange={onInputChange} onPressEnter={onCheckClick}></Input>
-                    <Button onClick={onCheckClick}>Check</Button>
+                    <Button onClick={onCheckClick}>Проверить</Button>
                 </div>
                 : <div style={{height: '50px'}}>
                     {right ? 'Правильно!' : 'Неверно!'} Ответ: {props.country.capital}
-                    <Button onClick={onNextClick} autoFocus={true}>Next</Button>
+                    <Button onClick={onNextClick} autoFocus={true}><RightOutlined /></Button>
                 </div>
             }
         </div>

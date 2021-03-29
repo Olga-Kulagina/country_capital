@@ -1,11 +1,19 @@
-import {countryCapitalList} from '../data';
+import {countryCapitalList, countryCapitalListAll} from '../data';
 import {CountryType} from '../components/Question';
 
 type initialStateType = typeof initialState
-export type countrySetType = 'Europe' | 'Asia' | 'Africa' | 'Australia and Oceania' | 'North America' | 'South America'
+export type countrySetType =
+    'Europe'
+    | 'Asia'
+    | 'Africa'
+    | 'Australia and Oceania'
+    | 'North America'
+    | 'South America'
+    | 'All'
 
 const initialState = {
     countryCapitalList: countryCapitalList,
+    countryCapitalListAll: countryCapitalListAll,
     displayList: [] as Array<CountryType>,
     countrySet: 'Europe',
     countryNumber: 0,
@@ -15,7 +23,8 @@ const initialState = {
 }
 
 
-type ActionTypes = GetCountryType | RunNewGameType | IncreaseScoreType
+type ActionTypes = GetCountryType | RunNewGameType | IncreaseScoreType | SetGameOverType
+
 //Тасование Фишера — Йетса
 function shuffle(array: any) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -32,14 +41,24 @@ export const gameReducer = (state: initialStateType = initialState, action: Acti
             return {...state, countryNumber: action.nextCountryNumber, displayCountry: newDisplayCountry}
         }
         case 'RUN_NEW_GAME': {
-            let shuffleArray = state.countryCapitalList[action.countrySet]
+            let shuffleArray = [] as Array<CountryType>
+            if (action.countrySet === 'All') {
+                shuffleArray = state.countryCapitalListAll.slice()
+                console.log(shuffleArray)
+            } else {
+                shuffleArray = state.countryCapitalList[action.countrySet].slice()
+                console.log(shuffleArray)
+            }
             shuffle(shuffleArray)
-            shuffleArray.length = action.numberOfQuestions
+            shuffleArray.splice(action.numberOfQuestions)
             console.log(shuffleArray)
             return {...state, displayList: shuffleArray, displayCountry: shuffleArray[0], isGameStart: true}
         }
         case 'INCREASE_SCORE': {
             return {...state, score: state.score + 1}
+        }
+        case 'SET_GAME_OVER': {
+            return {...state, isGameStart: false, score: 0, countryNumber: 0}
         }
         default: {
             return state
@@ -59,11 +78,16 @@ export const runNewGame = (countrySet: countrySetType, numberOfQuestions: number
 } as const)
 
 export const increaseScore = () => ({
-    type: 'INCREASE_SCORE',
+    type: 'INCREASE_SCORE'
+} as const)
+
+export const setGameOver = () => ({
+    type: 'SET_GAME_OVER'
 } as const)
 
 
 type GetCountryType = ReturnType<typeof getCountry>
 type RunNewGameType = ReturnType<typeof runNewGame>
 type IncreaseScoreType = ReturnType<typeof increaseScore>
+type SetGameOverType = ReturnType<typeof setGameOver>
 
