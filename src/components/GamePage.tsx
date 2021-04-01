@@ -5,7 +5,8 @@ import {AppRootStateType} from '../redux/redux-store';
 import {LeafletMap} from './LeafletMap';
 
 type GamePageType = {
-    record: number
+    lastRecord: number
+    isGameStart: boolean
 }
 
 export const GamePage = (props: GamePageType) => {
@@ -15,7 +16,7 @@ export const GamePage = (props: GamePageType) => {
 
     return (
         <div>
-            <Question country={displayCountry} displayList={displayList} record={props.record}/>
+            <Question country={displayCountry} displayList={displayList} lastRecord={props.lastRecord} isGameStart={props.isGameStart}/>
             <LeafletMap country={displayCountry}/>
         </div>
     )

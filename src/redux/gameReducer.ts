@@ -1,5 +1,6 @@
 import {countryCapitalList, countryCapitalListAll} from '../data';
 import {CountryType} from '../components/Question';
+import {recordType} from '../components/RecordsPage';
 
 type initialStateType = typeof initialState
 export type countrySetType =
@@ -19,7 +20,8 @@ const initialState = {
     countryNumber: 0,
     displayCountry: {} as CountryType,
     score: 0,
-    record: Number(localStorage.getItem('record')) | 0,
+    lastRecord: Number(localStorage.getItem('record')) | 0,
+    records: JSON.parse(String(localStorage.getItem('records'))) || [] as Array<recordType>,
     isGameStart: false
 }
 
@@ -59,13 +61,22 @@ export const gameReducer = (state: initialStateType = initialState, action: Acti
             return {...state, score: state.score + 1}
         }
         case 'SET_GAME_OVER': {
-            localStorage.setItem('record', action.score > state.record ? action.score.toString() : state.record.toString())
+            localStorage.setItem('record', action.score > state.lastRecord ? action.score.toString() : state.lastRecord.toString())
+
+            let newRecordsArr = state.records.slice()
+            if (action.score > state.lastRecord) {
+                newRecordsArr.push({count: action.score, date: Date.now()})
+                localStorage.setItem('records', JSON.stringify(newRecordsArr))
+            }
+
+
             return {
                 ...state,
                 isGameStart: false,
                 score: 0,
                 countryNumber: 0,
-                record: action.score > state.record ? action.score : state.record
+                lastRecord: action.score > state.lastRecord ? action.score : state.lastRecord,
+                records: newRecordsArr
             }
         }
         default: {
@@ -95,8 +106,8 @@ export const setGameOver = (score: number) => ({
 } as const)
 
 
+
 type GetCountryType = ReturnType<typeof getCountry>
 type RunNewGameType = ReturnType<typeof runNewGame>
 type IncreaseScoreType = ReturnType<typeof increaseScore>
 type SetGameOverType = ReturnType<typeof setGameOver>
-

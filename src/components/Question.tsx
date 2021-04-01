@@ -4,6 +4,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../redux/redux-store';
 import {getCountry, increaseScore, setGameOver} from '../redux/gameReducer';
 import {EnvironmentOutlined, RightOutlined} from '@ant-design/icons';
+import {Redirect} from 'react-router-dom';
+import {PATH} from '../App';
 
 export type CountryType = {
     name: string,
@@ -15,7 +17,8 @@ export type CountryType = {
 type QuestionPropsType = {
     country: CountryType
     displayList: Array<CountryType>
-    record: number
+    lastRecord: number
+    isGameStart: boolean
 }
 
 export const Question = (props: QuestionPropsType) => {
@@ -45,7 +48,7 @@ export const Question = (props: QuestionPropsType) => {
             content: (
                 <div>
                     <p>Правильных ответов: {score}</p>
-                    <p>Рекорд: {props.record > score ? props.record : score}</p>
+                    <p>Рекорд: {props.lastRecord > score ? props.lastRecord : score}</p>
                 </div>
             ),
             icon: <EnvironmentOutlined  />,
@@ -60,7 +63,7 @@ export const Question = (props: QuestionPropsType) => {
             content: (
                 <div>
                     <p>Правильных ответов: {score}</p>
-                    <p>Рекорд: {props.record > score ? props.record : score}</p>
+                    <p>Рекорд: {props.lastRecord > score ? props.lastRecord : score}</p>
                 </div>
             ),
             icon: <EnvironmentOutlined />,
@@ -83,6 +86,10 @@ export const Question = (props: QuestionPropsType) => {
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUserAnswer(e.currentTarget.value)
+    }
+
+    if(!props.isGameStart) {
+        return <Redirect to={PATH.START}/>
     }
 
     return (

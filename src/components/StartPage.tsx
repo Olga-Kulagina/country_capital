@@ -1,10 +1,14 @@
 import React, {useState} from 'react'
 import {Button, InputNumber, Radio, RadioChangeEvent} from 'antd';
 import {countrySetType, runNewGame} from '../redux/gameReducer';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {Redirect} from 'react-router-dom';
+import {PATH} from '../App';
+import {AppRootStateType} from '../redux/redux-store';
 
 type StartPageType = {
-    record: number
+    lastRecord: number
+    isGameStart: boolean
 }
 
 export const StartPage = (props: StartPageType) => {
@@ -51,6 +55,10 @@ export const StartPage = (props: StartPageType) => {
             break
     }
 
+    if(props.isGameStart) {
+        return <Redirect to={PATH.GAME}/>
+    }
+
     return (
         <div>
             <div>
@@ -71,7 +79,7 @@ export const StartPage = (props: StartPageType) => {
                 <Button onClick={onStartClick}>Старт!</Button>
             </div>
             <div>
-                <h2>Рекорд: {props.record}</h2>
+                <h2>Рекорд: {props.lastRecord}</h2>
             </div>
         </div>
     )
